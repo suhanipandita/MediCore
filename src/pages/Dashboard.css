@@ -1,0 +1,13 @@
+.dashboard .cards-row{
+  display:flex;
+  gap:16px;
+  margin-top:12px;
+}
+.card{
+  flex:1;
+  background:#ffffff;
+  padding:12px;
+  border-radius:8px;
+  border:1px solid #e6e6e6;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+}
