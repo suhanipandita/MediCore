@@ -1,0 +1,20 @@
+header, footer{
+  background: var(--primary);
+  color: white;
+  padding: 12px 20px;
+  text-align: center;
+}
+.app-shell main{
+  max-width: 1100px;
+  margin: 20px auto;
+  background: white;
+  border-radius: 8px;
+  padding: 18px;
+  box-shadow: 0 6px 18px rgba(15,23,42,0.06);
+}
+.nav-links a{
+  margin: 0 8px;
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+}
