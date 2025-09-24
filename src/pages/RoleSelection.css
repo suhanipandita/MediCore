@@ -1,0 +1,40 @@
+.role-button {
+  width: 350px;
+  padding: 12px;
+  margin: 10px 0;
+  border: 1px solid #1f7a6d;
+  border-radius: 15px;
+  background: transparent;
+  color: #1f7a6d;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.role-button:hover {
+  background-color: #1f7a6d;
+  color: white;
+}
+
+.carousel-dots {
+  display: flex;
+  gap: 8px;
+  margin-top: 20px;
+  margin-left: 15px; /* Adjust positioning */
+  align-items: center;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+}
+
+.dot.active {
+  width: 24px; /* Make it longer */
+  height: 8px;
+  border-radius: 10px; /* Rounded rectangle */
+  background-color: white; /* Highlighted */
+}
+

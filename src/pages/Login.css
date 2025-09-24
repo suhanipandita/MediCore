@@ -1,0 +1,92 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.login-container {
+  display: flex;
+  height: 100vh;
+}
+
+.left-section {
+  width: 45%;
+  background-color: #1f7a6d;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: left;
+  padding-left: 40px;
+}
+
+.left-section img {
+  width: 250px;
+  margin: 20px 0;
+}
+
+.right-section {
+  width: 55%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.right-section h1 {
+  font-size: 26px;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.right-section p {
+  font-size: 15px;
+  color: #0a4a3f;
+  margin-bottom: 20px;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+}
+
+.login-form input {
+  padding: 12px;
+  margin: 10px 0;
+  border: 1px solid #1f7a6d;
+  border-radius: 12px;
+  outline: none;
+}
+
+.login-btn {
+  background-color: #1f7a6d;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.role-button {
+    width: 350px;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #1f7a6d;
+    border-radius: 15px;
+    background: transparent;
+    color: #1f7a6d;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+/* Hover effect for all buttons */
+.role-button:hover {
+    background-color: #1f7a6d;
+    color: white;
+}
+
