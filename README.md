@@ -3,7 +3,7 @@ Medicore - Hospital Management (React, plain CSS)
 How to use:
 1. Unzip and open a terminal in the project folder.
 2. Run `npm install` to install dependencies.
-3. Run `npm start` to start the dev server at http://localhost:3000
+3. Run `npm start` to start the dev server at your local port.
 
 This project is a starter frontend (no Tailwind). It includes:
 - Login, Signup, Dashboard, Patients, Appointments pages
