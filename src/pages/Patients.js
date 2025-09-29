@@ -1,12 +1,26 @@
-import React, {useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import PatientCard from '../components/PatientCard';
+import { supabase } from '../supabaseClient'; // Import supabase client
 import './Patients.css';
 
 export default function Patients(){
-  const [patients, setPatients] = useState([
-    {id:1, name:'John Doe', age:45, status:'Admitted'},
-    {id:2, name:'Jane Smith', age:30, status:'Discharged'}
-  ]);
+  const [patients, setPatients] = useState([]);
+
+  useEffect(() => {
+    const fetchPatients = async () => {
+      const { data, error } = await supabase
+        .from('patients')
+        .select('*');
+      
+      if (error) {
+        console.error('Error fetching patients:', error);
+      } else {
+        setPatients(data);
+      }
+    };
+
+    fetchPatients();
+  }, []);
 
   return (
     <div>

@@ -1,11 +1,25 @@
-import React, {useState} from 'react';
+import React, { useState, useEffect } from 'react';
+import { supabase } from '../supabaseClient'; // Import supabase client
 import './Appointments.css';
 
 export default function Appointments(){
-  const [appointments, setAppointments] = useState([
-    {id:1, patient:'John Doe', date:'2025-09-10', time:'10:00'},
-    {id:2, patient:'Jane Smith', date:'2025-09-12', time:'11:30'}
-  ]);
+  const [appointments, setAppointments] = useState([]);
+
+  useEffect(() => {
+    const fetchAppointments = async () => {
+      const { data, error } = await supabase
+        .from('appointments')
+        .select('*');
+      
+      if (error) {
+        console.error('Error fetching appointments:', error);
+      } else {
+        setAppointments(data);
+      }
+    };
+
+    fetchAppointments();
+  }, []);
 
   return (
     <div>

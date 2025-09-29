@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import { Link } from 'react-router-dom';
+import { supabase } from '../supabaseClient';
 import './Auth.css';
 
 export default function Signup(){
@@ -7,10 +8,18 @@ export default function Signup(){
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // placeholder: register user
-    alert('Registered (placeholder). Now login.');
+    try {
+      const { user, error } = await supabase.auth.signUp({
+        email: email,
+        password: password,
+      });
+      if (error) throw error;
+      alert('Check your email for the login link!');
+    } catch (error) {
+      alert(error.error_description || error.message);
+    }
   }
 
   return (
