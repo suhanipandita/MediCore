@@ -1,13 +1,342 @@
-.dashboard .cards-row{
-  display:flex;
-  gap:16px;
-  margin-top:12px;
+/* General Body & Layout Styles */
+* {
+  box-sizing: border-box;
 }
-.card{
-  flex:1;
-  background:#ffffff;
-  padding:12px;
-  border-radius:8px;
-  border:1px solid #e6e6e6;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+
+body {
+  background-color: #f0f4f8;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  margin: 0;
+  color: #333;
+}
+
+.page-container {
+  width: 100%;
+  max-width: 1440px;
+  max-height: 680px;
+  margin: 0 auto;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  padding-right: 0px;
+  padding-left: 0px;
+}
+
+.dashboard-container {
+  background-color: #ffffff;
+  border-radius: 20px;
+  padding: 20px 40px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  width: 100%;
+}
+
+/* Navbar Styles */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.nav-brand {
+  font-size: 36px;
+  font-weight: 700;
+  color: #2D706E;
+  font-style: bold;
+  font-family: plus jakarta sans, sans-serif;
+}
+
+.nav-links {
+  display: flex;
+  gap: 40px;
+  margin: 0 auto;  
+  font-size: 18px;
+  font-weight: 700;
+  color: #4C6764;
+  font-style: bold;
+  font-family: plus jakarta sans, sans-serif;
+
+  /* Center the links */
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #555;
+  font-weight: 500;
+  font-size: 16px;
+  transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+  color: #2D706E;
+}
+
+.user-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.icon-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  color: #555;
+  padding: 0;
+}
+
+.notification-button {
+  border: 1px solid #ddd;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.notification-badge {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  background-color: #2D706E;
+  color: white;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid #ddd;
+  padding: 8px 15px;
+  border-radius: 20px;
+  color: #333;
+  text-decoration: none;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.user-profile:hover {
+  background-color: #f0f4f8;
+}
+
+.user-profile-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.logout-button {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 8px;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 10px 20px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  white-space: nowrap;
+}
+
+.user-profile-wrapper:hover .logout-button {
+  display: block;
+}
+
+
+/* Hero Section Styles */
+.hero-section {
+  background-color: #2D706E;
+  color: white;
+  max-width: 1320px;
+  max-height: 558px;
+  border-radius: 20px;
+  padding: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+}
+
+.hero-content {
+  flex: 1;
+  max-width: 550px;
+  font-family: "Plus Jakarta Sans", sans-serif;
+
+}
+
+.hero-content h1 {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 56px;
+  font-weight: 700;
+  line-height: 64px;
+  font-style: bold;
+}
+
+.hero-content p {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 28px;
+  line-height: 38px;
+  opacity: 0.9;
+  margin-bottom: 40px;
+}
+
+.hero-image {
+  flex-shrink: 0;
+}
+
+.hero-image img {
+  max-width: 350px;
+  height: auto;
+  border-radius: 15px;
+}
+
+
+/* Search Container Styles */
+.search-container {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  display: flex;
+  gap: 10px;
+  background-color: white;
+  padding: 10px;
+  border-radius: 12px;
+  align-items: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.search-input-wrapper::placeholder {
+  font-family: "Plus Jakarta Sans", sans-serif;
+}
+
+.search-input-wrapper {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  padding: 5px 10px;
+}
+
+.search-input-wrapper:first-of-type {
+  border-right: 1px solid #eee;
+}
+
+.search-input-wrapper input {
+  border: none;
+  outline: none;
+  width: 100%;
+  font-size: 16px;
+  color: #333;
+}
+
+.search-input-wrapper input::placeholder {
+  color: #999;
+}
+
+.search-button {
+  background-color: #2D706E;
+  border: none;
+  border-radius: 8px;
+  width: 44px;
+  height: 44px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.browse-link {
+  display: inline-block;
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+/* --- RESPONSIVE STYLES --- */
+
+/* For Tablets and smaller desktops */
+@media (max-width: 1024px) {
+  .nav-links {
+    display: none;
+    /* Hide links on smaller screens for simplicity */
+  }
+
+  .hero-section {
+    flex-direction: column;
+    text-align: center;
+    padding: 40px;
+  }
+
+  .hero-content {
+    max-width: 100%;
+  }
+
+  .hero-image {
+    margin-top: 30px;
+  }
+}
+
+/* For Mobile Phones */
+@media (max-width: 768px) {
+  .dashboard-container {
+    padding: 20px;
+  }
+
+  .navbar {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .hero-section {
+    padding: 30px 20px;
+  }
+
+  .hero-content h1 {
+    font-size: 36px;
+  }
+
+  .hero-content p {
+    font-size: 16px;
+  }
+
+  .hero-image {
+    display: none;
+  }
+
+  .search-container {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+  }
+
+  .search-input-wrapper {
+    border-right: none;
+    border-bottom: 1px solid #eee;
+    padding: 15px 10px;
+  }
+
+  .search-input-wrapper:last-of-type {
+    border-bottom: none;
+  }
+
+  .search-button {
+    width: 100%;
+    margin-top: 10px;
+    padding: 15px;
+  }
 }

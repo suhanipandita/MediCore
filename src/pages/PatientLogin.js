@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { supabase } from '../supabaseClient';
 
 // Helper component for the checkmark SVG icon
 const CheckmarkIcon = () => (
@@ -35,7 +37,8 @@ const ErrorIcon = () => (
 );
 
 
-function AuthScreen() {
+function PatientLogin() {
+    const navigate = useNavigate();
     const [step, setStep] = useState("login");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -57,13 +60,24 @@ function AuthScreen() {
     const [dateOfBirthError, setDateOfBirthError] = useState("");
     const [genderError, setGenderError] = useState("");
 
+    useEffect(() => {
+        // This handles the user session after they click the password reset link
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+            if (event === 'PASSWORD_RECOVERY') {
+                setStep('reset');
+            }
+        });
+
+        return () => subscription.unsubscribe();
+    }, []);
+
     // Password validation checks
     const hasLetter = /[A-Za-z]/.test(newPassword);
     const hasNumber = /\d/.test(newPassword);
     const hasSpecial = /[^A-Za-z0-9]/.test(newPassword);
     const has8Chars = newPassword.length >= 8;
     
-    const handleLogin = (e) => {
+    const handleLogin = async (e) => {
         e.preventDefault();
         setEmailError("");
         setPasswordError("");
@@ -79,12 +93,20 @@ function AuthScreen() {
         }
 
         if (isValid) {
-            alert(`Logging in with Email: ${email} and Password: ${password}`);
-            // Proceed with actual login logic here
+            try {
+                const { error } = await supabase.auth.signInWithPassword({
+                    email: email,
+                    password: password,
+                });
+                if (error) throw error;
+                navigate('/dashboard');
+            } catch (error) {
+                setPasswordError(error.message);
+            }
         }
     };
 
-    const handleSendLink = (e) => {
+    const handleSendLink = async (e) => {
         e.preventDefault();
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         const trimmedEmail = email.trim();
@@ -95,7 +117,15 @@ function AuthScreen() {
             setEmailError("Invalid email format.");
         } else {
             setEmailError("");
-            setStep("linkSent");
+            try {
+                const { error } = await supabase.auth.resetPasswordForEmail(email, {
+                    redirectTo: window.location.origin, // Redirects back to your app
+                });
+                if (error) throw error;
+                setStep("linkSent");
+            } catch (error) {
+                setEmailError(error.message);
+            }
         }
     };
 
@@ -129,39 +159,38 @@ function AuthScreen() {
         if (newPassword.trim() === "") {
             setNewPasswordError("Password is required.");
             isValid = false;
+        } else if (!hasLetter || !hasNumber || !hasSpecial || !has8Chars) {
+            setNewPasswordError("Password does not meet all requirements.");
+            isValid = false;
         }
+
         if (confirmPassword.trim() === "") {
             setConfirmPasswordError("Confirming password is required.");
             isValid = false;
         }
 
         else if (newPassword !== confirmPassword) {
-        setConfirmPasswordError("Passwords do not match.");
-        isValid = false;
+            setConfirmPasswordError("Passwords do not match.");
+            isValid = false;
         }
         if (isValid) {
-        // Change this line to move to the new screen
-        setStep("profileDetails"); 
+            setStep("profileDetails"); 
         }
-
     };
 
-    // Locate this function in your code
-    const handleProfileContinue = (e) => {
+    const handleProfileContinue = async (e) => {
         e.preventDefault();
         setFullNameError("");
         setDateOfBirthError("");
         setGenderError("");
 
         let isValid = true;
-        // Add this new regular expression to validate the full name
         const nameRegex = /^[A-Za-z\s]+$/; 
 
         if (fullName.trim() === "") {
             setFullNameError("Full Name is required.");
             isValid = false;
         } 
-        // Add this new else if block
         else if (!nameRegex.test(fullName)) { 
             setFullNameError("Name can only contain letters.");
             isValid = false;
@@ -177,12 +206,34 @@ function AuthScreen() {
         }
 
         if (isValid) {
-            alert("Profile details saved!");
-            setStep("login");
+            try {
+                const { data, error } = await supabase.auth.signUp({
+                    email: email,
+                    password: newPassword, // Using newPassword from previous step
+                    options: {
+                        data: {
+                            full_name: fullName,
+                            date_of_birth: dateOfBirth,
+                            gender: gender,
+                            role: 'patient'
+                        }
+                    }
+                });
+                if (error) throw error;
+                alert("Signup successful! Please check your email for a verification link.");
+                setStep("login");
+            } catch (error) {
+                // If the error is about an existing user, we can guide them.
+                if (error.message.includes("User already registered")) {
+                    setFullNameError("A user with this email already exists. Please log in.");
+                } else {
+                    setFullNameError(error.message);
+                }
+            }
         }
     };
 
-    const handleResetPassword = (e) => {
+    const handleResetPassword = async (e) => {
         e.preventDefault();
         setNewPasswordError("");
         setConfirmPasswordError("");
@@ -209,14 +260,19 @@ function AuthScreen() {
         }
 
         if (isValid) {
-            setStep("resetSuccess");
-            setNewPassword("");
-            setConfirmPassword("");
-            setIsPasswordFocused(false);
+            try {
+                const { error } = await supabase.auth.updateUser({ password: newPassword });
+                if (error) throw error;
+                setStep("resetSuccess");
+            } catch (error) {
+                setNewPasswordError(error.message);
+            } finally {
+                setNewPassword("");
+                setConfirmPassword("");
+                setIsPasswordFocused(false);
+            }
         }
     };
-
-    
     
     const clearAllErrors = () => {
         setEmailError("");
@@ -234,7 +290,7 @@ function AuthScreen() {
                         <p style={styles.subheading}>One portal for all your healthcare needs.</p>
                         <form style={styles.form} onSubmit={handleLogin}>
                             <div>
-                                <input type="email" placeholder="Email" style={{ ...styles.input, ...(emailError && styles.inputError) }} onChange={(e) => { setEmail(e.target.value); if(emailError) setEmailError(""); }} />
+                                <input type="email" placeholder="Email" value={email} style={{ ...styles.input, ...(emailError && styles.inputError) }} onChange={(e) => { setEmail(e.target.value); if(emailError) setEmailError(""); }} />
                                 {emailError && (
                                     <div style={{...styles.errorContainer, marginTop: '8px'}}>
                                         <ErrorIcon />
@@ -243,7 +299,7 @@ function AuthScreen() {
                                 )}
                             </div>
                              <div>
-                                <input type="password" placeholder="Password" style={{ ...styles.input, ...(passwordError && styles.inputError) }} onChange={(e) => { setPassword(e.target.value); if(passwordError) setPasswordError(""); }}/>
+                                <input type="password" placeholder="Password" value={password} style={{ ...styles.input, ...(passwordError && styles.inputError) }} onChange={(e) => { setPassword(e.target.value); if(passwordError) setPasswordError(""); }}/>
                                 {passwordError && (
                                     <div style={{...styles.errorContainer, marginTop: '8px'}}>
                                         <ErrorIcon />
@@ -265,7 +321,7 @@ function AuthScreen() {
                         <h2 style={styles.title}>Create an account</h2>
                         <p style={styles.subheading}>Enter your email address to create your account and start your journey with MediCore.</p>
                         <form style={styles.form} onSubmit={handleSignupContinue}>
-                            <input type="email" placeholder="Email" style={{ ...styles.input, ...(emailError && styles.inputError) }} onChange={(e) => { setEmail(e.target.value); if(emailError) setEmailError(""); }} />
+                            <input type="email" placeholder="Email" value={email} style={{ ...styles.input, ...(emailError && styles.inputError) }} onChange={(e) => { setEmail(e.target.value); if(emailError) setEmailError(""); }} />
                             {emailError && (
                                 <div style={styles.errorContainer}>
                                     <ErrorIcon />
@@ -472,7 +528,7 @@ function AuthScreen() {
                         <EmailSentIcon />
                         <h2 style={styles.emailSentTitle}>Email Sent</h2>
                         <p style={styles.description}>An email with password reset link has been sent to <b>{email}</b>. Open it to reset your password.</p>
-                        <button style={styles.openButton} onClick={() => { setStep("reset"); setIsPasswordFocused(false); }}>Open Email</button>
+                        <button style={styles.openButton} onClick={() => { window.open(`mailto:${email}`, '_blank'); }}>Open Email</button>
                         <p style={styles.resendText}>Didn’t receive email?{" "}
                             <span style={styles.resendLink} onClick={handleResend}>Resend Email</span>
                         </p>
@@ -625,7 +681,7 @@ const styles = {
     passwordRules: { padding: "0", listStyleType: "none", display: 'flex', flexDirection: 'column', gap: '4px' },
     ruleItem: { display: 'flex', alignItems: 'center', gap: '10px', fontSize: '13px' },
     bullet: { display: 'flex', justifyContent: 'center', alignItems: 'center', width: '14px', height: '14px', borderRadius: '50%', boxSizing: 'border-box', transition: 'all 0.2s ease-in-out' },
-    bulletNotMet: { border: '1px solid #D94C4C', backgroundColor: 'white' }, // Adjusted this line
+    bulletNotMet: { border: '1px solid #D94C4C', backgroundColor: 'white' },
     bulletMet: { border: '1px solid #2D706E', backgroundColor: '#2D706E' }, 
     
     // --- PASSWORD CREATE NEW STYLES ---
@@ -662,15 +718,6 @@ const styles = {
         backgroundColor: '#EAF3F3',
         borderRadius: '3px',
     },
-    // Remove these old styles
-// genderContainer: { ... }
-// radioGroup: { ... }
-// radioLabel: { ... }
-// radioInput: { ... }
-// radioGroupContainer: { ... }
-// genderBlock: { ... }
-// genderBlockSelected: { ... }
-// genderBlockError: { ... }
 
 // Add these new styles
 genderLabel: {
@@ -692,7 +739,7 @@ genderBox: {
     display: 'flex',
     alignItems: 'center',
     cursor: 'pointer',
-    flex: 1, // To make buttons fill the space
+    flex: 1,
     justifyContent: 'center',
     fontSize: '14px',
     color: '#333',
@@ -716,4 +763,5 @@ radioInput: {
     dotActive: { backgroundColor: 'white', width: '24px', borderRadius: '4px', },
 };
 
-export default AuthScreen;
+export default PatientLogin;
+
