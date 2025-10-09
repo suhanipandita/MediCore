@@ -336,10 +336,10 @@ function PatientLogin() {
                             <div style={styles.line}></div>
                         </div>
                         <div style={styles.socialLoginContainer}>
-                            <button style={styles.socialButton}><img src="https://www.google.com/favicon.ico" alt="Google" style={{width: '20px'}}/></button>
-                            <button style={styles.socialButton}><img src="https://static.xx.fbcdn.net/rsrc.php/yv/r/B8VkVNaeNs-.ico" alt="Facebook" style={{width: '20px'}}/></button>
-                            <button style={styles.socialButton}><img src="https://www.apple.com/favicon.ico" alt="Apple" style={{width: '20px'}}/></button>
-                            <button style={styles.socialButton}><img src="https://www.microsoft.com/favicon.ico" alt="Microsoft" style={{width: '20px'}}/></button>
+                            <button style={styles.socialButton}><img src="Frame 195.svg" alt="Google" style={{width: '20px'}}/></button>
+                            <button style={styles.socialButton}><img src="facebook.svg" alt="Facebook" style={{width: '20px'}}/></button>
+                            <button style={styles.socialButton}><img src="apple.svg" alt="Apple" style={{width: '20px'}}/></button>
+                            <button style={styles.socialButton}><img src="microsoft.svg" alt="Microsoft" style={{width: '20px'}}/></button>
                         </div>
                         <p style={styles.termsText}>By continuing you agree to Medicore's <span style={{...styles.link, marginTop: 0}}>Terms of Service</span> and acknowledge you've read our <span style={{...styles.link, marginTop: 0}}>Privacy Policy</span>.</p>
                         <p style={{ fontSize: "13px", color: '#6c757d' }}>Already have an account?{" "}
