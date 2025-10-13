@@ -23,8 +23,8 @@ const EmailSentIcon = () => (
 const PasswordSuccessIcon = () => (
     <div style={styles.iconContainer}>
         <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 21.6C12 21.6 19.2 18 19.2 12V6L12 3.6L4.8 6V12C4.8 18 12 21.6 12 21.6Z" fill="#2D706E"/>
-            <path d="M10.875 14.313L8.562 12L7.5 13.062L10.875 16.437L16.5 10.812L15.438 9.75L10.875 14.313Z" fill="white"/>
+            <path d="M12 21.6C12 21.6 19.2 18 19.2 12V6L12 3.6L4.8 6V12C4.8 18 12 21.6 12 21.6Z" fill="#2D706E" />
+            <path d="M10.875 14.313L8.562 12L7.5 13.062L10.875 16.437L16.5 10.812L15.438 9.75L10.875 14.313Z" fill="white" />
         </svg>
     </div>
 );
@@ -32,7 +32,7 @@ const PasswordSuccessIcon = () => (
 // Helper component for the error icon
 const ErrorIcon = () => (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" fill="#D94C4C"/>
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" fill="#D94C4C" />
     </svg>
 );
 
@@ -76,12 +76,12 @@ function PatientLogin() {
     const hasNumber = /\d/.test(newPassword);
     const hasSpecial = /[^A-Za-z0-9]/.test(newPassword);
     const has8Chars = newPassword.length >= 8;
-    
+
     const handleLogin = async (e) => {
         e.preventDefault();
         setEmailError("");
         setPasswordError("");
-        
+
         let isValid = true;
         if (email.trim() === "") {
             setEmailError("Email address is required.");
@@ -98,8 +98,11 @@ function PatientLogin() {
                     email: email,
                     password: password,
                 });
+
                 if (error) throw error;
-                navigate('/dashboard');
+
+                navigate('/');
+
             } catch (error) {
                 setPasswordError(error.message);
             }
@@ -133,12 +136,12 @@ function PatientLogin() {
         setIsResent(true);
         setTimeout(() => setIsResent(false), 2000);
     };
-    
+
     const handleSignupContinue = (e) => {
         e.preventDefault();
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         const trimmedEmail = email.trim();
-        
+
         if (trimmedEmail === "") {
             setEmailError("Email is required.");
         } else if (!emailRegex.test(trimmedEmail)) {
@@ -174,7 +177,7 @@ function PatientLogin() {
             isValid = false;
         }
         if (isValid) {
-            setStep("profileDetails"); 
+            setStep("profileDetails");
         }
     };
 
@@ -185,17 +188,15 @@ function PatientLogin() {
         setGenderError("");
 
         let isValid = true;
-        const nameRegex = /^[A-Za-z\s]+$/; 
+        const nameRegex = /^[A-Za-z\s]+$/;
 
         if (fullName.trim() === "") {
             setFullNameError("Full Name is required.");
             isValid = false;
-        } 
-        else if (!nameRegex.test(fullName)) { 
+        } else if (!nameRegex.test(fullName)) {
             setFullNameError("Name can only contain letters.");
             isValid = false;
         }
-        
         if (dateOfBirth.trim() === "") {
             setDateOfBirthError("Date of Birth is required.");
             isValid = false;
@@ -207,28 +208,27 @@ function PatientLogin() {
 
         if (isValid) {
             try {
-                const { data, error } = await supabase.auth.signUp({
+                const { error } = await supabase.auth.signUp({
                     email: email,
-                    password: newPassword, // Using newPassword from previous step
+                    password: newPassword,
                     options: {
                         data: {
                             full_name: fullName,
                             date_of_birth: dateOfBirth,
                             gender: gender,
                             role: 'patient'
-                        }
-                    }
+                        },
+                    },
                 });
+
                 if (error) throw error;
-                alert("Signup successful! Please check your email for a verification link.");
-                setStep("login");
+
+                alert('Signup successful! Please check your email to verify your account.');
+                setStep("login"); // Go back to login after successful signup
+
             } catch (error) {
-                // If the error is about an existing user, we can guide them.
-                if (error.message.includes("User already registered")) {
-                    setFullNameError("A user with this email already exists. Please log in.");
-                } else {
-                    setFullNameError(error.message);
-                }
+                // This will catch any sign-up errors from Supabase.
+                setFullNameError(error.message);
             }
         }
     };
@@ -248,7 +248,7 @@ function PatientLogin() {
             setConfirmPasswordError("Confirming New Password is required.");
             isValid = false;
         }
-        
+
         if (isValid && newPassword.trim() !== "") {
             if (!hasLetter || !hasNumber || !hasSpecial || !has8Chars) {
                 setNewPasswordError("Password does not meet all requirements.");
@@ -273,7 +273,7 @@ function PatientLogin() {
             }
         }
     };
-    
+
     const clearAllErrors = () => {
         setEmailError("");
         setPasswordError("");
@@ -290,18 +290,18 @@ function PatientLogin() {
                         <p style={styles.subheading}>One portal for all your healthcare needs.</p>
                         <form style={styles.form} onSubmit={handleLogin}>
                             <div>
-                                <input type="email" placeholder="Email" value={email} style={{ ...styles.input, ...(emailError && styles.inputError) }} onChange={(e) => { setEmail(e.target.value); if(emailError) setEmailError(""); }} />
+                                <input type="email" placeholder="Email" value={email} style={{ ...styles.input, ...(emailError && styles.inputError) }} onChange={(e) => { setEmail(e.target.value); if (emailError) setEmailError(""); }} />
                                 {emailError && (
-                                    <div style={{...styles.errorContainer, marginTop: '8px'}}>
+                                    <div style={{ ...styles.errorContainer, marginTop: '8px' }}>
                                         <ErrorIcon />
                                         <p style={styles.errorText}>{emailError}</p>
                                     </div>
                                 )}
                             </div>
-                             <div>
-                                <input type="password" placeholder="Password" value={password} style={{ ...styles.input, ...(passwordError && styles.inputError) }} onChange={(e) => { setPassword(e.target.value); if(passwordError) setPasswordError(""); }}/>
+                            <div>
+                                <input type="password" placeholder="Password" value={password} style={{ ...styles.input, ...(passwordError && styles.inputError) }} onChange={(e) => { setPassword(e.target.value); if (passwordError) setPasswordError(""); }} />
                                 {passwordError && (
-                                    <div style={{...styles.errorContainer, marginTop: '8px'}}>
+                                    <div style={{ ...styles.errorContainer, marginTop: '8px' }}>
                                         <ErrorIcon />
                                         <p style={styles.errorText}>{passwordError}</p>
                                     </div>
@@ -321,14 +321,14 @@ function PatientLogin() {
                         <h2 style={styles.title}>Create an account</h2>
                         <p style={styles.subheading}>Enter your email address to create your account and start your journey with MediCore.</p>
                         <form style={styles.form} onSubmit={handleSignupContinue}>
-                            <input type="email" placeholder="Email" value={email} style={{ ...styles.input, ...(emailError && styles.inputError) }} onChange={(e) => { setEmail(e.target.value); if(emailError) setEmailError(""); }} />
+                            <input type="email" placeholder="Email" value={email} style={{ ...styles.input, ...(emailError && styles.inputError) }} onChange={(e) => { setEmail(e.target.value); if (emailError) setEmailError(""); }} />
                             {emailError && (
                                 <div style={styles.errorContainer}>
                                     <ErrorIcon />
                                     <p style={styles.errorText}>{emailError}</p>
                                 </div>
                             )}
-                            <button style={{...styles.button, marginTop: emailError ? '0px' : '20px'}} type="submit">Continue</button>
+                            <button style={{ ...styles.button, marginTop: emailError ? '0px' : '20px' }} type="submit">Continue</button>
                         </form>
                         <div style={styles.separator}>
                             <div style={styles.line}></div>
@@ -336,12 +336,12 @@ function PatientLogin() {
                             <div style={styles.line}></div>
                         </div>
                         <div style={styles.socialLoginContainer}>
-                            <button style={styles.socialButton}><img src="Frame 195.svg" alt="Google" style={{width: '20px'}}/></button>
-                            <button style={styles.socialButton}><img src="facebook.svg" alt="Facebook" style={{width: '20px'}}/></button>
-                            <button style={styles.socialButton}><img src="apple.svg" alt="Apple" style={{width: '20px'}}/></button>
-                            <button style={styles.socialButton}><img src="microsoft.svg" alt="Microsoft" style={{width: '20px'}}/></button>
+                            <button style={styles.socialButton}><img src="Frame 195.svg" alt="Google" style={{ width: '20px' }} /></button>
+                            <button style={styles.socialButton}><img src="facebook.svg" alt="Facebook" style={{ width: '20px' }} /></button>
+                            <button style={styles.socialButton}><img src="apple.svg" alt="Apple" style={{ width: '20px' }} /></button>
+                            <button style={styles.socialButton}><img src="microsoft.svg" alt="Microsoft" style={{ width: '20px' }} /></button>
                         </div>
-                        <p style={styles.termsText}>By continuing you agree to Medicore's <span style={{...styles.link, marginTop: 0}}>Terms of Service</span> and acknowledge you've read our <span style={{...styles.link, marginTop: 0}}>Privacy Policy</span>.</p>
+                        <p style={styles.termsText}>By continuing you agree to Medicore's <span style={{ ...styles.link, marginTop: 0 }}>Terms of Service</span> and acknowledge you've read our <span style={{ ...styles.link, marginTop: 0 }}>Privacy Policy</span>.</p>
                         <p style={{ fontSize: "13px", color: '#6c757d' }}>Already have an account?{" "}
                             <span style={styles.link} onClick={() => { clearAllErrors(); setStep("login"); }}>Log in</span>
                         </p>
@@ -355,7 +355,7 @@ function PatientLogin() {
                         <div style={styles.arrowProgressBarContainer}>
                             <div style={styles.backButtonContainer} onClick={() => setStep("signup")}>
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M15 18L9 12L15 6" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                    <path d="M15 18L9 12L15 6" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                                 </svg>
                             </div>
                             <div style={styles.progressBar}>
@@ -385,20 +385,20 @@ function PatientLogin() {
                                         <p style={styles.rulesTitle}>Your password must contain at least</p>
                                         <ul style={styles.passwordRules}>
                                             <li style={styles.ruleItem}>
-                                                <span style={{...styles.bullet, ...(hasLetter ? styles.bulletMet : styles.bulletNotMet)}}>{hasLetter && <CheckmarkIcon />}</span>
-                                                <span style={{color: hasLetter ? '#2D706E' : '#D94C4C'}}>1 letter</span>
+                                                <span style={{ ...styles.bullet, ...(hasLetter ? styles.bulletMet : styles.bulletNotMet) }}>{hasLetter && <CheckmarkIcon />}</span>
+                                                <span style={{ color: hasLetter ? '#2D706E' : '#D94C4C' }}>1 letter</span>
                                             </li>
                                             <li style={styles.ruleItem}>
-                                                <span style={{...styles.bullet, ...(hasNumber ? styles.bulletMet : styles.bulletNotMet)}}>{hasNumber && <CheckmarkIcon />}</span>
-                                                <span style={{color: hasNumber ? '#2D706E' : '#D94C4C'}}>1 number</span>
+                                                <span style={{ ...styles.bullet, ...(hasNumber ? styles.bulletMet : styles.bulletNotMet) }}>{hasNumber && <CheckmarkIcon />}</span>
+                                                <span style={{ color: hasNumber ? '#2D706E' : '#D94C4C' }}>1 number</span>
                                             </li>
                                             <li style={styles.ruleItem}>
-                                                <span style={{...styles.bullet, ...(hasSpecial ? styles.bulletMet : styles.bulletNotMet)}}>{hasSpecial && <CheckmarkIcon />}</span>
-                                                <span style={{color: hasSpecial ? '#2D706E' : '#D94C4C'}}>1 Special character</span>
+                                                <span style={{ ...styles.bullet, ...(hasSpecial ? styles.bulletMet : styles.bulletNotMet) }}>{hasSpecial && <CheckmarkIcon />}</span>
+                                                <span style={{ color: hasSpecial ? '#2D706E' : '#D94C4C' }}>1 Special character</span>
                                             </li>
                                             <li style={styles.ruleItem}>
-                                                <span style={{...styles.bullet, ...(has8Chars ? styles.bulletMet : styles.bulletNotMet)}}>{has8Chars && <CheckmarkIcon />}</span>
-                                                <span style={{color: has8Chars ? '#2D706E' : '#D94C4C'}}>8 characters</span>
+                                                <span style={{ ...styles.bullet, ...(has8Chars ? styles.bulletMet : styles.bulletNotMet) }}>{has8Chars && <CheckmarkIcon />}</span>
+                                                <span style={{ color: has8Chars ? '#2D706E' : '#D94C4C' }}>8 characters</span>
                                             </li>
                                         </ul>
                                     </div>
@@ -442,7 +442,7 @@ function PatientLogin() {
                         <div style={styles.arrowProgressBarContainer}>
                             <div style={styles.backButtonContainer} onClick={() => setStep("createPassword")}>
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M15 18L9 12L15 6" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                    <path d="M15 18L9 12L15 6" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                                 </svg>
                             </div>
                             <div style={styles.progressBar}>
@@ -458,7 +458,7 @@ function PatientLogin() {
                                     placeholder="Full Name"
                                     style={{ ...styles.input, ...(fullNameError && styles.inputError) }}
                                     value={fullName}
-                                    onChange={(e) => { setFullName(e.target.value); if(fullNameError) setFullNameError(""); }}
+                                    onChange={(e) => { setFullName(e.target.value); if (fullNameError) setFullNameError(""); }}
                                 />
                                 {fullNameError && (
                                     <div style={{ ...styles.errorContainer, marginTop: '8px' }}>
@@ -473,7 +473,7 @@ function PatientLogin() {
                                     placeholder="Date of Birth"
                                     style={{ ...styles.input, ...(dateOfBirthError && styles.inputError) }}
                                     value={dateOfBirth}
-                                    onChange={(e) => { setDateOfBirth(e.target.value); if(dateOfBirthError) setDateOfBirthError(""); }}
+                                    onChange={(e) => { setDateOfBirth(e.target.value); if (dateOfBirthError) setDateOfBirthError(""); }}
                                 />
                                 {dateOfBirthError && (
                                     <div style={{ ...styles.errorContainer, marginTop: '8px' }}>
@@ -484,13 +484,13 @@ function PatientLogin() {
                             </div>
                             <p style={styles.genderLabel}>Gender</p>
                             <div style={styles.genderGroup}>
-                                <label style={{...styles.genderBox, ...(gender === "Male" && styles.genderBoxSelected), ...(genderError && styles.genderBoxError)}} onClick={() => { setGender("Male"); if(genderError) setGenderError(""); }}>
+                                <label style={{ ...styles.genderBox, ...(gender === "Male" && styles.genderBoxSelected), ...(genderError && styles.genderBoxError) }} onClick={() => { setGender("Male"); if (genderError) setGenderError(""); }}>
                                     <input type="radio" name="gender" value="Male" checked={gender === "Male"} style={styles.radioInput} readOnly /> Male
                                 </label>
-                                <label style={{...styles.genderBox, ...(gender === "Female" && styles.genderBoxSelected), ...(genderError && styles.genderBoxError)}} onClick={() => { setGender("Female"); if(genderError) setGenderError(""); }}>
+                                <label style={{ ...styles.genderBox, ...(gender === "Female" && styles.genderBoxSelected), ...(genderError && styles.genderBoxError) }} onClick={() => { setGender("Female"); if (genderError) setGenderError(""); }}>
                                     <input type="radio" name="gender" value="Female" checked={gender === "Female"} style={styles.radioInput} readOnly /> Female
                                 </label>
-                                <label style={{...styles.genderBox, ...(gender === "Other" && styles.genderBoxSelected), ...(genderError && styles.genderBoxError)}} onClick={() => { setGender("Other"); if(genderError) setGenderError(""); }}>
+                                <label style={{ ...styles.genderBox, ...(gender === "Other" && styles.genderBoxSelected), ...(genderError && styles.genderBoxError) }} onClick={() => { setGender("Other"); if (genderError) setGenderError(""); }}>
                                     <input type="radio" name="gender" value="Other" checked={gender === "Other"} style={styles.radioInput} readOnly /> Other
                                 </label>
                             </div>
@@ -510,14 +510,14 @@ function PatientLogin() {
                         <h2 style={styles.title}>Reset Password</h2>
                         <p style={styles.subheading}>Enter your email to receive a password reset link.</p>
                         <form style={styles.form} onSubmit={handleSendLink}>
-                            <input type="email" placeholder="Email" style={{ ...styles.input, ...(emailError && styles.inputError) }} value={email} onChange={(e) => { setEmail(e.target.value); if(emailError) setEmailError(""); }} />
+                            <input type="email" placeholder="Email" style={{ ...styles.input, ...(emailError && styles.inputError) }} value={email} onChange={(e) => { setEmail(e.target.value); if (emailError) setEmailError(""); }} />
                             {emailError && (
-                                    <div style={{...styles.errorContainer, marginTop: '8px'}}>
-                                        <ErrorIcon />
-                                        <p style={styles.errorText}>{emailError}</p>
-                                    </div>
-                                )}
-                            <button style={{...styles.button, marginTop: emailError ? '0px' : '20px'}} type="submit">Send Link</button>
+                                <div style={{ ...styles.errorContainer, marginTop: '8px' }}>
+                                    <ErrorIcon />
+                                    <p style={styles.errorText}>{emailError}</p>
+                                </div>
+                            )}
+                            <button style={{ ...styles.button, marginTop: emailError ? '0px' : '20px' }} type="submit">Send Link</button>
                         </form>
                         <p style={styles.link} onClick={() => { clearAllErrors(); setStep("login"); }}>Back to Login</p>
                     </div>
@@ -547,7 +547,7 @@ function PatientLogin() {
                                     <span style={styles.show} onClick={() => setShowNewPassword(!showNewPassword)}>{showNewPassword ? "Hide" : "Show"}</span>
                                 </div>
                                 {newPasswordError && (
-                                    <div style={{...styles.errorContainer, marginTop: '8px'}}>
+                                    <div style={{ ...styles.errorContainer, marginTop: '8px' }}>
                                         <ErrorIcon />
                                         <p style={styles.errorText}>{newPasswordError}</p>
                                     </div>
@@ -559,20 +559,20 @@ function PatientLogin() {
                                     <p style={styles.rulesTitle}>Your password must contain at least</p>
                                     <ul style={styles.passwordRules}>
                                         <li style={styles.ruleItem}>
-                                            <span style={{...styles.bullet, ...(hasLetter ? styles.bulletMet : styles.bulletNotMet)}}>{hasLetter && <CheckmarkIcon />}</span>
-                                            <span style={{color: hasLetter ? '#2D706E' : '#D94C4C'}}>1 letter</span>
+                                            <span style={{ ...styles.bullet, ...(hasLetter ? styles.bulletMet : styles.bulletNotMet) }}>{hasLetter && <CheckmarkIcon />}</span>
+                                            <span style={{ color: hasLetter ? '#2D706E' : '#D94C4C' }}>1 letter</span>
                                         </li>
                                         <li style={styles.ruleItem}>
-                                            <span style={{...styles.bullet, ...(hasNumber ? styles.bulletMet : styles.bulletNotMet)}}>{hasNumber && <CheckmarkIcon />}</span>
-                                            <span style={{color: hasNumber ? '#2D706E' : '#D94C4C'}}>1 number</span>
+                                            <span style={{ ...styles.bullet, ...(hasNumber ? styles.bulletMet : styles.bulletNotMet) }}>{hasNumber && <CheckmarkIcon />}</span>
+                                            <span style={{ color: hasNumber ? '#2D706E' : '#D94C4C' }}>1 number</span>
                                         </li>
                                         <li style={styles.ruleItem}>
-                                            <span style={{...styles.bullet, ...(hasSpecial ? styles.bulletMet : styles.bulletNotMet)}}>{hasSpecial && <CheckmarkIcon />}</span>
-                                            <span style={{color: hasSpecial ? '#2D706E' : '#D94C4C'}}>1 Special character</span>
+                                            <span style={{ ...styles.bullet, ...(hasSpecial ? styles.bulletMet : styles.bulletNotMet) }}>{hasSpecial && <CheckmarkIcon />}</span>
+                                            <span style={{ color: hasSpecial ? '#2D706E' : '#D94C4C' }}>1 Special character</span>
                                         </li>
                                         <li style={styles.ruleItem}>
-                                            <span style={{...styles.bullet, ...(has8Chars ? styles.bulletMet : styles.bulletNotMet)}}>{has8Chars && <CheckmarkIcon />}</span>
-                                            <span style={{color: has8Chars ? '#2D706E' : '#D94C4C'}}>8 characters</span>
+                                            <span style={{ ...styles.bullet, ...(has8Chars ? styles.bulletMet : styles.bulletNotMet) }}>{has8Chars && <CheckmarkIcon />}</span>
+                                            <span style={{ color: has8Chars ? '#2D706E' : '#D94C4C' }}>8 characters</span>
                                         </li>
                                     </ul>
                                 </div>
@@ -583,8 +583,8 @@ function PatientLogin() {
                                     <input type={showConfirmPassword ? "text" : "password"} placeholder="Confirm New Password" style={{ ...styles.input, ...(confirmPasswordError && styles.inputError) }} value={confirmPassword} onChange={(e) => { setConfirmPassword(e.target.value); if (confirmPasswordError) setConfirmPasswordError(""); }} />
                                     <span style={styles.show} onClick={() => setShowConfirmPassword(!showConfirmPassword)}>{showConfirmPassword ? "Hide" : "Show"}</span>
                                 </div>
-                                   {confirmPasswordError && (
-                                    <div style={{...styles.errorContainer, marginTop: '8px'}}>
+                                {confirmPasswordError && (
+                                    <div style={{ ...styles.errorContainer, marginTop: '8px' }}>
                                         <ErrorIcon />
                                         <p style={styles.errorText}>{confirmPasswordError}</p>
                                     </div>
@@ -617,11 +617,11 @@ function PatientLogin() {
             <div style={styles.left}>
                 <h2 style={{ color: "white", fontSize: '24px', fontWeight: '600', width: '100%', textAlign: 'left' }}>Medicore</h2>
                 <img src="image.png" alt="stethoscope" style={{ width: "90%", margin: "20px 0", maxWidth: '400px' }} />
-                <div style={{width: '100%', textAlign: 'left'}}>
+                <div style={{ width: '100%', textAlign: 'left' }}>
                     <h3 style={{ color: "white", fontSize: '36px', fontWeight: '600' }}>Smarter Care Starts Here</h3>
                     <p style={{ color: "#cfe8e4", maxWidth: '320px', margin: '15px 0', lineHeight: '1.6' }}>MediCore unites patients and professionals — simplifying care, records, and billing.</p>
                 </div>
-                <div style={{...styles.carouselDots, width: '100%', justifyContent: 'flex-start'}}>
+                <div style={{ ...styles.carouselDots, width: '100%', justifyContent: 'flex-start' }}>
                     <span style={{ ...styles.dot, ...styles.dotActive }}></span>
                     <span style={styles.dot}></span>
                     <span style={styles.dot}></span>
@@ -652,7 +652,7 @@ const styles = {
     buttonDisabled: { backgroundColor: '#a6c3c2', cursor: 'not-allowed' },
     link: { color: "#2D706E", cursor: "pointer", marginTop: "15px", fontSize: "13px", fontWeight: "bold", textDecoration: 'none' },
     show: { position: "absolute", right: "20px", top: "50%", transform: "translateY(-50%)", fontSize: "13px", color: "#2D706E", cursor: "pointer", fontWeight: "bold" },
-    
+
     // --- VALIDATION ERROR ---
     inputError: { borderColor: '#D94C4C' },
     errorContainer: { display: 'flex', alignItems: 'center', gap: '8px', marginTop: '8px', alignSelf: 'flex-start', paddingLeft: '10px' },
@@ -664,7 +664,7 @@ const styles = {
     socialLoginContainer: { display: 'flex', justifyContent: 'center', gap: '20px', width: '100%', marginBottom: '20px' },
     socialButton: { backgroundColor: '#2D706E', border: 'none', borderRadius: '50%', width: '40px', height: '40px', display: 'flex', justifyContent: 'center', alignItems: 'center', cursor: 'pointer' },
     termsText: { fontSize: '12px', color: '#888', maxWidth: '320px', lineHeight: '1.6', marginBottom: '20px' },
-    
+
     // --- EMAIL SENT & SUCCESS SCREENS ---
     emailSentBox: { maxWidth: "400px", display: "flex", flexDirection: "column", alignItems: "center", },
     iconContainer: { display: 'flex', justifyContent: 'center', alignItems: 'center', width: '80px', height: '80px', borderRadius: '50%', backgroundColor: '#EAF3F3', marginBottom: '25px' },
@@ -682,8 +682,8 @@ const styles = {
     ruleItem: { display: 'flex', alignItems: 'center', gap: '10px', fontSize: '13px' },
     bullet: { display: 'flex', justifyContent: 'center', alignItems: 'center', width: '14px', height: '14px', borderRadius: '50%', boxSizing: 'border-box', transition: 'all 0.2s ease-in-out' },
     bulletNotMet: { border: '1px solid #D94C4C', backgroundColor: 'white' },
-    bulletMet: { border: '1px solid #2D706E', backgroundColor: '#2D706E' }, 
-    
+    bulletMet: { border: '1px solid #2D706E', backgroundColor: '#2D706E' },
+
     // --- PASSWORD CREATE NEW STYLES ---
     arrowProgressBarContainer: {
         display: 'flex',
@@ -719,44 +719,44 @@ const styles = {
         borderRadius: '3px',
     },
 
-// Add these new styles
-genderLabel: {
-    fontSize: '14px',
-    color: '#6c757d',
-    alignSelf: 'flex-start',
-    marginBottom: '10px',
-    paddingLeft: '10px',
-},
-genderGroup: {
-    display: 'flex',
-    gap: '16px',
-    width: '100%',
-},
-genderBox: {
-    border: '1px solid #A8B5C6',
-    borderRadius: '25px',
-    padding: '12px 24px',
-    display: 'flex',
-    alignItems: 'center',
-    cursor: 'pointer',
-    flex: 1,
-    justifyContent: 'center',
-    fontSize: '14px',
-    color: '#333',
-    transition: 'all 0.2s ease',
-},
-genderBoxSelected: {
-    borderColor: '#2D706E',
-},
-genderBoxError: {
-    borderColor: '#D94C4C',
-},
-radioInput: {
-    marginRight: '8px',
-    accentColor: '#2D706E',
-    cursor: 'pointer',
-},
-    
+    // Add these new styles
+    genderLabel: {
+        fontSize: '14px',
+        color: '#6c757d',
+        alignSelf: 'flex-start',
+        marginBottom: '10px',
+        paddingLeft: '10px',
+    },
+    genderGroup: {
+        display: 'flex',
+        gap: '16px',
+        width: '100%',
+    },
+    genderBox: {
+        border: '1px solid #A8B5C6',
+        borderRadius: '25px',
+        padding: '12px 24px',
+        display: 'flex',
+        alignItems: 'center',
+        cursor: 'pointer',
+        flex: 1,
+        justifyContent: 'center',
+        fontSize: '14px',
+        color: '#333',
+        transition: 'all 0.2s ease',
+    },
+    genderBoxSelected: {
+        borderColor: '#2D706E',
+    },
+    genderBoxError: {
+        borderColor: '#D94C4C',
+    },
+    radioInput: {
+        marginRight: '8px',
+        accentColor: '#2D706E',
+        cursor: 'pointer',
+    },
+
     // --- CAROUSEL DOTS ---
     carouselDots: { display: 'flex', gap: '10px' },
     dot: { width: '8px', height: '8px', borderRadius: '50%', backgroundColor: 'rgba(255, 255, 255, 0.4)', transition: 'all 0.3s ease' },
