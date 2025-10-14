@@ -56,8 +56,6 @@ body {
   color: #4C6764;
   font-style: bold;
   font-family: plus jakarta sans, sans-serif;
-
-  /* Center the links */
 }
 
 .nav-links a {
@@ -83,57 +81,64 @@ body {
   border: none;
   cursor: pointer;
   position: relative;
-  color: #555;
+  color: #2A7B72;
   padding: 0;
+  font-family: plus jakarta sans, sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  gap:10px;
 }
 
 .notification-button {
-  border: 1px solid #ddd;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
+  border: 1px solid #2A7B72;
+  border-radius: 20px;
+  width: 67px;
+  height: 52px;
   display: flex;
   align-items: center;
   justify-content: center;
+  gap : 5px;
 }
 
 .notification-badge {
-  position: absolute;
-  top: -2px;
-  right: -2px;
-  background-color: #2D706E;
-  color: white;
+  color: #2D706E;
   border-radius: 50%;
   width: 18px;
   height: 18px;
-  font-size: 11px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: bold;
+  font-size: 16px;
+  font-weight: 500;  
+  font-family: plus jakarta sans, sans-serif;
 }
 
 .user-profile {
   display: flex;
   align-items: center;
-  gap: 10px;
-  border: 1px solid #ddd;
+  border: 1px solid #2A7B72;
   padding: 8px 15px;
   border-radius: 20px;
-  color: #333;
+  color: #2A7B72;
   text-decoration: none;
   font-weight: 500;
-  transition: background-color 0.2s ease;
+  font-size: 16px;
+  transition: background-color 2s ease;
+  height : 52px;
+  font-family: plus jakarta sans, sans-serif;
+  gap: 10px;
 }
 
 .user-profile:hover {
   background-color: #f0f4f8;
+  
 }
 
 .user-profile-wrapper {
   position: relative;
   display: flex;
   align-items: center;
+  
 }
 
 .logout-button {
@@ -142,13 +147,14 @@ body {
   top: 100%;
   right: 0;
   margin-top: 8px;
-  background-color: white;
+  background-color: rgb(249, 69, 69);
   border: 1px solid #ddd;
   border-radius: 8px;
   padding: 10px 20px;
   cursor: pointer;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   white-space: nowrap;
+  transition-delay: 5s;
 }
 
 .user-profile-wrapper:hover .logout-button {
@@ -238,8 +244,9 @@ body {
   border: none;
   outline: none;
   width: 100%;
-  font-size: 16px;
+  font-size: 14px;
   color: #333;
+  font-family: "Plus Jakarta Sans", sans-serif;
 }
 
 .search-input-wrapper input::placeholder {
