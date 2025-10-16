@@ -3,6 +3,7 @@
   --primary: #00695c;
   --bg: #f5f5f5;
   --muted: #6b7280;
+  font-family: plus jakarta sans, sans-serif;
 }
 *{box-sizing:border-box}
 body{
@@ -10,6 +11,7 @@ body{
   font-family: Inter, Arial, sans-serif;
   background:var(--bg);
   color:#111827;
+  font-family: plus jakarta sans, sans-serif;
 }
 a{color:var(--primary)}
 main{padding:20px}

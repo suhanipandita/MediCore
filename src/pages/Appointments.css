@@ -1,2 +1,3 @@
 .appt-table{width:100%; border-collapse:collapse; margin-top:12px}
-.appt-table th, .appt-table td{border:1px solid #e5e7eb; padding:8px; text-align:left}
+.appt-table th, .appt-table td{border:1px solid #e5e7eb; padding:8px; text-align:left; font-family: plus jakarta sans, sans-serif;
+}

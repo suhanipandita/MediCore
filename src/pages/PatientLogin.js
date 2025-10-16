@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from '../supabaseClient';
+import './PatientLogin.css';
 
 // Helper component for the checkmark SVG icon
 const CheckmarkIcon = () => (
@@ -11,7 +12,7 @@ const CheckmarkIcon = () => (
 
 // Helper component for the "Email Sent" SVG icon
 const EmailSentIcon = () => (
-    <div style={styles.iconContainer}>
+    <div className="body" style={styles.iconContainer}>
         <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M21.25 12C21.25 17.108 17.108 21.25 12 21.25C6.892 21.25 2.75 17.108 2.75 12C2.75 6.892 6.892 2.75 12 2.75C17.108 2.75 21.25 6.892 21.25 12Z" stroke="#2D706E" strokeWidth="1.5" />
             <path d="M16 9.5L13.25 11.625C12.558 12.158 11.442 12.158 10.75 11.625L8 9.5M16.5 14.5H7.5C7.224 14.5 7 14.276 7 14V8.5C7 8.224 7.224 8 7.5 8H16.5C16.776 8 17 8.224 17 8.5V14C17 14.276 16.776 14.5 16.5 14.5Z" stroke="#2D706E" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -21,7 +22,7 @@ const EmailSentIcon = () => (
 
 // Helper component for the "Password Reset Successful" SVG icon
 const PasswordSuccessIcon = () => (
-    <div style={styles.iconContainer}>
+    <div className="body" style={styles.iconContainer}>
         <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M12 21.6C12 21.6 19.2 18 19.2 12V6L12 3.6L4.8 6V12C4.8 18 12 21.6 12 21.6Z" fill="#2D706E" />
             <path d="M10.875 14.313L8.562 12L7.5 13.062L10.875 16.437L16.5 10.812L15.438 9.75L10.875 14.313Z" fill="white" />
@@ -285,7 +286,7 @@ function PatientLogin() {
         switch (step) {
             case "login":
                 return (
-                    <div style={styles.formContainer}>
+                    <div className="body" style={styles.formContainer}>
                         <h2 style={styles.title}>Log in to Patient Portal</h2>
                         <p style={styles.subheading}>One portal for all your healthcare needs.</p>
                         <form style={styles.form} onSubmit={handleLogin}>
@@ -317,7 +318,7 @@ function PatientLogin() {
                 );
             case "signup":
                 return (
-                    <div style={styles.formContainer}>
+                    <div className="body" style={styles.formContainer}>
                         <h2 style={styles.title}>Create an account</h2>
                         <p style={styles.subheading}>Enter your email address to create your account and start your journey with MediCore.</p>
                         <form style={styles.form} onSubmit={handleSignupContinue}>
@@ -349,7 +350,7 @@ function PatientLogin() {
                 );
             case "createPassword":
                 return (
-                    <div style={styles.formContainer}>
+                    <div className="body" style={styles.formContainer}>
                         <h2 style={styles.title}>Create an account</h2>
                         <p style={styles.subheading}>Set a secure password for your Patient Portal.</p>
                         <div style={styles.arrowProgressBarContainer}>
@@ -436,7 +437,7 @@ function PatientLogin() {
                 );
             case "profileDetails":
                 return (
-                    <div style={styles.formContainer}>
+                    <div className="body" style={styles.formContainer}>
                         <h2 style={styles.title}>Create an account</h2>
                         <p style={styles.subheading}>Add your details to customize your Patient Portal.</p>
                         <div style={styles.arrowProgressBarContainer}>
@@ -506,7 +507,7 @@ function PatientLogin() {
                 );
             case "forgot":
                 return (
-                    <div style={styles.formContainer}>
+                    <div className="body" style={styles.formContainer}>
                         <h2 style={styles.title}>Reset Password</h2>
                         <p style={styles.subheading}>Enter your email to receive a password reset link.</p>
                         <form style={styles.form} onSubmit={handleSendLink}>
@@ -524,7 +525,7 @@ function PatientLogin() {
                 );
             case "linkSent":
                 return (
-                    <div style={styles.emailSentBox}>
+                    <div className="body" style={styles.emailSentBox}>
                         <EmailSentIcon />
                         <h2 style={styles.emailSentTitle}>Email Sent</h2>
                         <p style={styles.description}>An email with password reset link has been sent to <b>{email}</b>. Open it to reset your password.</p>
@@ -537,7 +538,7 @@ function PatientLogin() {
                 );
             case "reset":
                 return (
-                    <div style={styles.formContainer}>
+                    <div className="body" style={styles.formContainer}>
                         <h2 style={styles.title}>Create a New Password</h2>
                         <p style={styles.subheading}>Enter and confirm your new password to regain access to your Patient Portal.</p>
                         <form style={styles.form} onSubmit={handleResetPassword}>
@@ -597,7 +598,7 @@ function PatientLogin() {
                 );
             case "resetSuccess":
                 return (
-                    <div style={styles.emailSentBox}>
+                    <div className="body" style={styles.emailSentBox}>
                         <PasswordSuccessIcon />
                         <h2 style={styles.emailSentTitle}>Password Reset Successful</h2>
                         <p style={styles.description}>Your password has been updated. You can now log in with your new credentials.</p>
@@ -612,9 +613,9 @@ function PatientLogin() {
     };
 
     return (
-        <div style={styles.container}>
+        <div className="body" style={styles.container}>
             {/* LEFT SIDE */}
-            <div style={styles.left}>
+            <div className="body" style={styles.left}>
                 <h2 style={{ color: "white", fontSize: '24px', fontWeight: '600', width: '100%', textAlign: 'left' }}>Medicore</h2>
                 <img src="image.png" alt="stethoscope" style={{ width: "90%", margin: "20px 0", maxWidth: '400px' }} />
                 <div style={{ width: '100%', textAlign: 'left' }}>

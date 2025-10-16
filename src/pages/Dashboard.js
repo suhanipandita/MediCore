@@ -53,11 +53,11 @@ export default function Dashboard() {
                   <img src="profile.svg" />
                   <span>{user.email.split('@')[0]}</span>
                 </div>
-                <button onClick={handleLogout} className="logout-button">Logout</button>
+                <button onClick={handleLogout} className="logout-button ">Logout</button>
               </div>
             ) : (
               <Link to="/patient-login" className="user-profile">
-                <button className="icon-button">
+                <button className="icon-button ">
                   <img src="profile.svg" /> <span>Login / Sign Up</span>
                 </button>
               </Link>
